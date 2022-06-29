@@ -30,3 +30,30 @@ provider.setCustomParameters({
 
 export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+
+export const db = getFirestore();
+
+export const createUserDocumentFromAuth = async (user) => {
+    const userDocRef = doc(db, 'users', user.uid);
+
+    const userSnapshot = await getDoc(userDocRef);
+
+    // If user data does not exists
+    // create / set the document with the data from userAuth in my collection
+    if (!userSnapshot.exists()) {
+        const { displayName, email } = user;
+        const createdAt = new Date();
+
+        try {
+            await setDoc(userDocRef, {
+                displayName,
+                email,
+                createdAt
+            });
+        } catch (err) {
+            console.log(`error creating user: ${err.message}`);
+        }
+    }
+
+    return userDocRef;
+};
