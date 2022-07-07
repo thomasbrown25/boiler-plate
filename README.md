@@ -1,6 +1,6 @@
-# Goby Sample Server APP - To Do List
+# Crown Shopping ECommerce App
 
-![Sample App Image](./img/sample-app-img.png)
+![Sample App Image](./src/assets/clothing-shop-homepage-img.png)
 
 ## Requirement
 
