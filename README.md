@@ -1,13 +1,14 @@
-# Crown Shopping ECommerce App
+# Crown ECommerce App
 
-![Sample App Image](./src/assets/clothing-shop-homepage-img.png)
+![Crown Shopping App Image](./src/assets/clothing-shop-homepage-img.png)
 
 ## Requirement
 
+-   Git
+-   Yarn or NPM
+-   Node.js
 -   Firebase
 -   GraphQL
--   Node.js
--   Yarn or NPM
 
 ## Usage
 
