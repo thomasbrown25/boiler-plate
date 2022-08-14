@@ -5,7 +5,6 @@ import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
 
 import {
     signInWithGooglePopup,
-    createUserDocumentFromAuth,
     signInAuthUserWithEmailAndPassword
 } from '../../utils/firebase/firebase.utils';
 
@@ -37,10 +36,7 @@ const SignInForm = () => {
 
         // Sign in user with email and password
         try {
-            const { user } = await signInAuthUserWithEmailAndPassword(
-                email,
-                password
-            );
+            await signInAuthUserWithEmailAndPassword(email, password);
 
             resetFormFields();
         } catch (err) {
