@@ -1,37 +1,43 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { compose, createStore, applyMiddleware } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import logger from 'redux-logger';
-// import thunk from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
+
 import { rootReducer } from './root-reducer';
 
-// const loggerMiddleware = (store) => (next) => (action) => {
-//     if (!action.type) {
-//         return next(action);
-//     }
+import { rootSaga } from './root-saga';
+// import thunk from 'redux-thunk';
 
-//     console.log('type: ', action.type);
-//     console.log('payload: ', action.payload);
-//     console.log('currentState: ', store.getState());
+const persistConfig = {
+    key: 'root',
+    storage,
+    whitelist: ['cart']
+};
 
-//     next(action);
+const sagaMiddleware = createSagaMiddleware();
 
-//     console.log('next state: ', store.getState());
-// };
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const initialState = {};
+const middleWares = [
+    process.env.NODE_ENV !== 'production' && logger,
+    sagaMiddleware
+].filter(Boolean);
 
-const middlewares = [logger];
+const composeEnhancer =
+    (process.env.NODE_ENV !== 'production' &&
+        window &&
+        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+    compose;
 
-const composedEnhancers = compose(applyMiddleware(...middlewares));
+const composedEnhancers = composeEnhancer(applyMiddleware(...middleWares));
 
-export const store = createStore(rootReducer, initialState, composedEnhancers);
+export const store = createStore(
+    persistedReducer,
+    undefined,
+    composedEnhancers
+);
 
-// export const store = createStore(
-//     rootReducer,
-//     initialState,
-//     compose(
-//         applyMiddleware(...middlewares),
-//         (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
-//             window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__()) ||
-//             compose
-//     )
-// );
+sagaMiddleware.run(rootSaga);
+
+export const persistor = persistStore(store);

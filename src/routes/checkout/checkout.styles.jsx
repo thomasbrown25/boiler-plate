@@ -25,6 +25,7 @@ export const HeaderBlock = styled.div`
         width: 8%;
     }
 `;
+
 export const Total = styled.span`
     margin-top: 30px;
     margin-left: auto;
